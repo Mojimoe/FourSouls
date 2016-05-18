@@ -19,10 +19,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JumpVelocity")
 		float JumpVelocity = 800.0f;
     
-    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "ast")
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Melee")
     UAnimMontage* astMeleeLgt;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ast")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Melee")
 	float LightDelay=0.3f;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Melee")
+    UAnimMontage* astMeleeHvy;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Melee")
+    float HeavyDelay=0.6f;
 
     
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "carm")
@@ -49,6 +53,7 @@ public:
     virtual float PlayAnimMontage(class UAnimMontage* AnimMontage, float InPlayRate = 1.0f, FName StartSectionName = NAME_None) override;
     
     virtual void doMeleeLgt();
+    virtual void doMeleeHvy();
 
 	virtual void doJump();
 

@@ -52,6 +52,7 @@ void AfsCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
 {
 	Super::SetupPlayerInputComponent(InputComponent);
 	InputComponent->BindAction("MeleeLgt", IE_Pressed, this, &AfsCharacter::doMeleeLgt);
+    InputComponent->BindAction("MeleeHvy", IE_Pressed, this, &AfsCharacter::doMeleeHvy);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AfsCharacter::doJump);
     InputComponent->BindAxis("Player_X",this,&AfsCharacter::MoveX);
     InputComponent->BindAxis("Player_Y",this,&AfsCharacter::MoveY);
@@ -96,6 +97,16 @@ void AfsCharacter::doMeleeLgt()
         MeleeAllowed = false;
         PlayAnimMontage(astMeleeLgt);
         GetWorldTimerManager().SetTimer(MeleeTimer,this,&AfsCharacter::MeleeCold,LightDelay,false);
+    }
+}
+
+void AfsCharacter::doMeleeHvy()
+{
+    if(MeleeAllowed)
+    {
+        MeleeAllowed = false;
+        PlayAnimMontage(astMeleeHvy);
+        GetWorldTimerManager().SetTimer(MeleeTimer,this,&AfsCharacter::MeleeCold,HeavyDelay,false);
     }
 }
 
