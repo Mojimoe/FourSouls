@@ -51,7 +51,8 @@ void AfsCharacter::MoveY(float in)
 void AfsCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);
-    InputComponent->BindAction("MeleeLgt",IE_Pressed,this,&AfsCharacter::doMeleeLgt);
+	InputComponent->BindAction("MeleeLgt", IE_Pressed, this, &AfsCharacter::doMeleeLgt);
+	InputComponent->BindAction("Jump", IE_Pressed, this, &AfsCharacter::doJump);
     InputComponent->BindAxis("Player_X",this,&AfsCharacter::MoveX);
     InputComponent->BindAxis("Player_Y",this,&AfsCharacter::MoveY);
     InputComponent->BindAxis("Player_Yaw",this,&AfsCharacter::AddControllerYawInput);
@@ -79,8 +80,27 @@ void AfsCharacter::doMeleeLgt()
     if(MeleeAllowed)
     {
         MeleeAllowed = false;
-        GEngine->AddOnScreenDebugMessage(-1,2,FColor::Red,TEXT("001"));
         PlayAnimMontage(astMeleeLgt);
         GetWorldTimerManager().SetTimer(MeleeTimer,this,&AfsCharacter::MeleeCold,1.0f,false);
     }
+}
+
+void AfsCharacter::doJump()
+{
+	UCharacterMovementComponent *charmov = this->GetCharacterMovement();
+	if (charmov->MovementMode != MOVE_Walking)
+	{
+		JumpVal += 1;
+	}
+	if (JumpVal <= 2)
+	{
+		charmov->MovementMode = MOVE_Falling;
+		charmov->Velocity.Z = JumpVelocity;
+	}
+	JumpVal += 1;
+}
+void AfsCharacter::Landed(const FHitResult &Hit)
+{
+	Super::Landed(Hit);
+	JumpVal = 0;
 }
