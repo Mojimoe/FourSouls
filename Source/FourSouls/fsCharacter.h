@@ -21,6 +21,9 @@ public:
     
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "ast")
     UAnimMontage* astMeleeLgt;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ast")
+	float LightDelay=0.3f;
+
     
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "carm")
     USpringArmComponent* PlayerCameraArm;
@@ -50,4 +53,10 @@ public:
 	virtual void doJump();
 
 	virtual void Landed(const FHitResult &Hit) override;
+	void AddControllerYawInputGP(float in);
+	void AddControllerPitchInputGP(float in);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ControllerSensitivity")
+	float PitchSensitivity = 2.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ControllerSensitivity")
+	float YawSensitivity = 2.0f;
 };

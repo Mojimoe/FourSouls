@@ -57,6 +57,20 @@ void AfsCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
     InputComponent->BindAxis("Player_Y",this,&AfsCharacter::MoveY);
     InputComponent->BindAxis("Player_Yaw",this,&AfsCharacter::AddControllerYawInput);
     InputComponent->BindAxis("Player_Pitch",this,&AfsCharacter::AddControllerPitchInput);
+	InputComponent->BindAxis("Player_XGP", this, &AfsCharacter::MoveX);
+	InputComponent->BindAxis("Player_YGP", this, &AfsCharacter::MoveY);
+	InputComponent->BindAxis("Player_YawGP", this, &AfsCharacter::AddControllerYawInputGP);
+	InputComponent->BindAxis("Player_PitchGP", this, &AfsCharacter::AddControllerPitchInputGP);
+}
+
+void AfsCharacter::AddControllerYawInputGP(float in)
+{
+	AddControllerYawInput(YawSensitivity*in);
+}
+
+void AfsCharacter::AddControllerPitchInputGP(float in)
+{
+	AddControllerPitchInput(PitchSensitivity*in);
 }
 
 float AfsCharacter::PlayAnimMontage(class UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName)
@@ -81,7 +95,7 @@ void AfsCharacter::doMeleeLgt()
     {
         MeleeAllowed = false;
         PlayAnimMontage(astMeleeLgt);
-        GetWorldTimerManager().SetTimer(MeleeTimer,this,&AfsCharacter::MeleeCold,1.0f,false);
+        GetWorldTimerManager().SetTimer(MeleeTimer,this,&AfsCharacter::MeleeCold,LightDelay,false);
     }
 }
 
@@ -96,6 +110,7 @@ void AfsCharacter::doJump()
 	{
 		charmov->MovementMode = MOVE_Falling;
 		charmov->Velocity.Z = JumpVelocity;
+		//Jump();
 	}
 	JumpVal += 1;
 }
