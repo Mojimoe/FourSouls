@@ -11,13 +11,17 @@ class FOURSOULS_API AfsCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-    bool MeleeAllowed;
+    bool MeleeAllowed = true;
+    bool SwitchAllowed = true;
     FTimerHandle MeleeTimer;
+    FTimerHandle SwitchTimer;
     void MeleeCold();
 	int JumpVal = 0;
-	
+    int CharacterMode = 0;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "SwitchDelay")
+    float SwitchDelay = .1f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JumpVelocity")
-		float JumpVelocity = 800.0f;
+    float JumpVelocity = 800.0f;
     
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Melee")
     UAnimMontage* astMeleeLgt;
@@ -64,4 +68,8 @@ public:
 	float PitchSensitivity = 2.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ControllerSensitivity")
 	float YawSensitivity = 2.0f;
+    void CharacterModeChange();
+    void SwitchCold();
+    void doRightShoulder();
+    void doRightTrigger();
 };

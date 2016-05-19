@@ -51,9 +51,10 @@ void AfsCharacter::MoveY(float in)
 void AfsCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);
-	InputComponent->BindAction("MeleeLgt", IE_Pressed, this, &AfsCharacter::doMeleeLgt);
-    InputComponent->BindAction("MeleeHvy", IE_Pressed, this, &AfsCharacter::doMeleeHvy);
+	InputComponent->BindAction("RightShoulder", IE_Pressed, this, &AfsCharacter::doRightShoulder);
+    InputComponent->BindAction("RightTrigger", IE_Pressed, this, &AfsCharacter::doRightTrigger);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AfsCharacter::doJump);
+    InputComponent->BindAction("Mode",IE_Pressed,this,&AfsCharacter::CharacterModeChange);
     InputComponent->BindAxis("Player_X",this,&AfsCharacter::MoveX);
     InputComponent->BindAxis("Player_Y",this,&AfsCharacter::MoveY);
     InputComponent->BindAxis("Player_Yaw",this,&AfsCharacter::AddControllerYawInput);
@@ -125,8 +126,46 @@ void AfsCharacter::doJump()
 	}
 	JumpVal += 1;
 }
+
 void AfsCharacter::Landed(const FHitResult &Hit)
 {
 	Super::Landed(Hit);
 	JumpVal = 0;
+}
+void AfsCharacter::CharacterModeChange()
+{
+    if(SwitchAllowed)
+    {
+        switch(CharacterMode)
+        {
+            case 0://melee
+                CharacterMode = 1;
+                GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode gun"));
+                break;
+            case 1://gun
+                CharacterMode = 2;
+                GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode magic"));
+                break;
+            case 2://magic or special
+                CharacterMode = 0;
+                GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode melee"));
+                break;
+        }
+        SwitchAllowed = false;
+        GetWorldTimerManager().SetTimer(SwitchTimer,this,&AfsCharacter::SwitchCold,SwitchDelay,false);
+    }
+}
+void AfsCharacter::SwitchCold()
+{
+    SwitchAllowed = true;
+}
+void AfsCharacter::doRightShoulder()
+{
+    if(CharacterMode == 0)
+        doMeleeLgt();
+}
+void AfsCharacter::doRightTrigger()
+{
+    if(CharacterMode == 0)
+        doMeleeHvy();
 }
