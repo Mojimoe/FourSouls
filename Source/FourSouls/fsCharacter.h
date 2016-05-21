@@ -25,7 +25,7 @@ public:
 	
     //delays, cooldowns, and sensitivities. heavy and light delay will be switched to weapon class. TODO
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "SwitchDelay")
-    float SwitchDelay = .1f;
+    float SwitchDelay = 2.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JumpVelocity")
     float JumpVelocity = 800.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Melee")

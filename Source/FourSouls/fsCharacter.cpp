@@ -166,30 +166,30 @@ void AfsCharacter::doLeftTriggerReleased()
 void AfsCharacter::doFaceTopPressed()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Face Top Pressed"));
-    if(SwitchAllowed)
-    {
-        switch(CharacterMode)
-        {
-            case 0://melee
-                CharacterMode = 1;
-                GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode ranged"));
-                break;
-            case 1://gun
-                CharacterMode = 2;
-                GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode magic"));
-                break;
-            case 2://magic or special
-                CharacterMode = 0;
-                GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode melee"));
-                break;
-        }
-        SwitchAllowed = false;
-        GetWorldTimerManager().SetTimer(SwitchTimer,this,&AfsCharacter::SwitchCold,SwitchDelay,false);
-    }
+    GetWorldTimerManager().SetTimer(SwitchTimer,this,&AfsCharacter::SwitchCold,SwitchDelay,false);
 }
 void AfsCharacter::doFaceTopReleased()
 {
-        GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Face Top Released"));
+    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Face Top Released"));
+	if(GetWorldTimerManager().GetTimerRemaining(SwitchTimer)!=-1.0f)
+	{
+		GetWorldTimerManager().ClearTimer(SwitchTimer);
+		switch(CharacterMode)
+    	{
+    	    case 0://melee
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Ranged"));
+    	        CharacterMode = 1;
+    	        break;
+    	    case 1://gun
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Melee"));
+    	        CharacterMode = 0;
+    	        break;
+    	    case 2://magic or special
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Melee"));
+    	        CharacterMode = 0;
+    	        break;
+    	}
+	}
 }
 void AfsCharacter::doFaceRightPressed()
 {
@@ -278,7 +278,22 @@ void AfsCharacter::doLeftStickReleased()
 
 void AfsCharacter::SwitchCold()
 {
-    SwitchAllowed = true;
+    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Switch timeout, Long Press."));
+    switch(CharacterMode)
+    {
+        case 0://melee
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Magic"));
+            CharacterMode = 2;
+            break;
+        case 1://gun
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Magic"));
+            CharacterMode = 2;
+            break;
+        case 2://magic or special
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Ranged"));
+            CharacterMode = 1;
+            break;
+    }
 }
 
 void AfsCharacter::MeleeCold()
