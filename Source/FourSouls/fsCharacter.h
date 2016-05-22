@@ -56,6 +56,11 @@ public:
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "cam")
     UCameraComponent* PlayerCamera;
     
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = "Weapon")
+    TSubclassOf<AfsMeleeWeapon> MeleeWeaponToSpawn;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = "Weapon")
+    TSubclassOf<AfsRangedWeapon> RangedWeaponToSpawn;
+    
 	// Sets default values for this character's properties
 	AfsCharacter();
 

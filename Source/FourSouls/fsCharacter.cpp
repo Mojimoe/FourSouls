@@ -22,9 +22,17 @@ AfsCharacter::AfsCharacter()
 void AfsCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	MeleeWeapon = GetWorld()->SpawnActor<AfsMeleeWeapon>(FVector::ZeroVector,FRotator::ZeroRotator);
+    FVector MeleeSpl = FVector::ZeroVector;
+    FRotator MeleeSpr = FRotator::ZeroRotator;
+    FActorSpawnParameters MeleeSpp;
+    MeleeSpp.Instigator = this;
+	MeleeWeapon = GetWorld()->SpawnActor<AfsMeleeWeapon>(MeleeWeaponToSpawn,MeleeSpl,MeleeSpr,MeleeSpp);
 	if(MeleeWeapon)MeleeWeapon->OnEquip(this);
-	RangedWeapon = GetWorld()->SpawnActor<AfsRangedWeapon>(FVector::ZeroVector,FRotator::ZeroRotator);
+    FVector RangedSpl = FVector::ZeroVector;
+    FRotator RangedSpr = FRotator::ZeroRotator;
+    FActorSpawnParameters RangedSpp;
+    RangedSpp.Instigator = this;
+	RangedWeapon = GetWorld()->SpawnActor<AfsRangedWeapon>(RangedWeaponToSpawn,RangedSpl,RangedSpr,RangedSpp);
 	if(RangedWeapon)RangedWeapon->OnEquip(this);
 }
 
