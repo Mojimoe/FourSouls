@@ -17,34 +17,54 @@ public:
     
 	AfsCharacter* Player;
     FTimerHandle MeleeTimer;
-    FTimerHandle SkillTimer;
+    FTimerHandle RangedSkillTimer;
+    FTimerHandle MeleeSkillTimer;
     FTimerHandle ShotTimer;
-    FTimerHandle RechargeTimer;
+    FTimerHandle RangedRechargeTimer;
+    FTimerHandle MeleeRechargeTimer;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     float MeleeLightCooldown = .2f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     float MeleeHeavyCooldown = .4f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
-    float SkillCooldown = 1.0f;
+    float MeleeSkillCooldown = 1.0f;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    float RangedSkillCooldown = 1.0f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     float ShotCooldown = .1f;//could change this to be interpreted as shots/second
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
-    float HeatIncrement = .1f;
+    float RangedHeatIncrement = .1f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
-    float OverHeat = .1f;
+    float RangedOverHeat = .1f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
-    float WeaponOverHeatMultiple= 2.f;
-
-    bool IsMelee=true;
-	bool InIronSights = false;
+    float MeleeOverHeat = .1f;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    float WeaponMeleeOverHeatMultiple= 2.f;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    float WeaponRangedOverHeatMultiple= 2.f;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
 	bool AutomaticFire = false;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    bool IsMelee=true;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    UAnimMontage* astMeleeHvy;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    UAnimMontage* astMeleeLgt;
+
+	bool InIronSights = false;
 	bool CanFire = true;
+	bool CanMelee= true;
 	bool ShotFlag = true;
-	bool SkillColdFlag = true;
+	bool MeleeFlag = true;
+	bool MeleeSkillColdFlag = true;
+	bool RangedSkillColdFlag = true;
+	float HeatIncrement = 0.f;
     
     virtual void StartFire();
     virtual void StopFire();
-    virtual void IncreaseHeat();
+	virtual void FeatherPrevention();
+    virtual void IncreaseMeleeHeat();
+    virtual void IncreaseRangedHeat();
     virtual void Fire();
     virtual void RangedSkill();
     virtual void MeleeHvy();
@@ -52,8 +72,10 @@ public:
     virtual void MeleeSkill();
 	virtual void EnterIronSights();
 	virtual void LeaveIronSights();
-	virtual void WeaponCold();
-	virtual void SkillCold();
+	virtual void MeleeWeaponCold();
+	virtual void RangedWeaponCold();
+	virtual void RangedSkillCold();
+	virtual void MeleeSkillCold();
     
     //up to three weapon abilities per weapon
     virtual void OnLeftTriggerPressed();

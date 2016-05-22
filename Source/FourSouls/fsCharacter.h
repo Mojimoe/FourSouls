@@ -19,8 +19,8 @@ public:
     FTimerHandle MeleeTimer;
     FTimerHandle SwitchTimer;
 
-	AfsMeleeWeapon* MeleeWeapon=nullptr;
-	AfsRangedWeapon* RangedWeapon=nullptr;
+	AfsWeapon* MeleeWeapon=nullptr;
+	AfsWeapon* RangedWeapon=nullptr;
 
     //character state booleans
     bool MeleeAllowed = true;
@@ -57,9 +57,9 @@ public:
     UCameraComponent* PlayerCamera;
     
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = "Weapon")
-    TSubclassOf<AfsMeleeWeapon> MeleeWeaponToSpawn;
+    TSubclassOf<AfsWeapon> MeleeWeaponToSpawn;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = "Weapon")
-    TSubclassOf<AfsRangedWeapon> RangedWeaponToSpawn;
+    TSubclassOf<AfsWeapon> RangedWeaponToSpawn;
     
 	// Sets default values for this character's properties
 	AfsCharacter();

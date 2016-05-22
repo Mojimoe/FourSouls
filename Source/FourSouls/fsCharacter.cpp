@@ -26,14 +26,22 @@ void AfsCharacter::BeginPlay()
     FRotator MeleeSpr = FRotator::ZeroRotator;
     FActorSpawnParameters MeleeSpp;
     MeleeSpp.Instigator = this;
-	MeleeWeapon = GetWorld()->SpawnActor<AfsMeleeWeapon>(MeleeWeaponToSpawn,MeleeSpl,MeleeSpr,MeleeSpp);
-	if(MeleeWeapon)MeleeWeapon->OnEquip(this);
+	MeleeWeapon = GetWorld()->SpawnActor<AfsWeapon>(MeleeWeaponToSpawn,MeleeSpl,MeleeSpr,MeleeSpp);
+	if (MeleeWeapon)
+	{
+		MeleeWeapon->OnEquip(this);
+		MeleeWeapon->IsMelee = true;
+	}
     FVector RangedSpl = FVector::ZeroVector;
     FRotator RangedSpr = FRotator::ZeroRotator;
     FActorSpawnParameters RangedSpp;
     RangedSpp.Instigator = this;
-	RangedWeapon = GetWorld()->SpawnActor<AfsRangedWeapon>(RangedWeaponToSpawn,RangedSpl,RangedSpr,RangedSpp);
-	if(RangedWeapon)RangedWeapon->OnEquip(this);
+	RangedWeapon = GetWorld()->SpawnActor<AfsWeapon>(RangedWeaponToSpawn,RangedSpl,RangedSpr,RangedSpp);
+	if (RangedWeapon)
+	{
+		RangedWeapon->OnEquip(this);
+		RangedWeapon->IsMelee = false;
+	}
 }
 
 // Called every frame
