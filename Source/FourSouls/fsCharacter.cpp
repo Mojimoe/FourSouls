@@ -2,6 +2,9 @@
 
 #include "FourSouls.h"
 #include "fsCharacter.h"
+#include "fsMeleeWeapon.h"
+#include "fsRangedWeapon.h"
+
 
 // Sets default values
 AfsCharacter::AfsCharacter()
@@ -19,14 +22,16 @@ AfsCharacter::AfsCharacter()
 void AfsCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	MeleeWeapon = GetWorld()->SpawnActor<AfsMeleeWeapon>(FVector::ZeroVector,FRotator::ZeroRotator);
+	if(MeleeWeapon)MeleeWeapon->OnEquip(this);
+	RangedWeapon = GetWorld()->SpawnActor<AfsRangedWeapon>(FVector::ZeroVector,FRotator::ZeroRotator);
+	if(RangedWeapon)RangedWeapon->OnEquip(this);
 }
 
 // Called every frame
 void AfsCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-
 }
 
 void AfsCharacter::MoveX(float in)
@@ -109,43 +114,90 @@ float AfsCharacter::PlayAnimMontage(class UAnimMontage* AnimMontage, float InPla
 
 void AfsCharacter::doMeleeLgt()
 {
-    if(MeleeAllowed)
-    {
-        MeleeAllowed = false;
-        PlayAnimMontage(astMeleeLgt);
-        GetWorldTimerManager().SetTimer(MeleeTimer,this,&AfsCharacter::MeleeCold,LightDelay,false);
-    }
+    PlayAnimMontage(astMeleeLgt);
 }
 
 void AfsCharacter::doMeleeHvy()
 {
-    if(MeleeAllowed)
-    {
-        MeleeAllowed = false;
-        PlayAnimMontage(astMeleeHvy);
-        GetWorldTimerManager().SetTimer(MeleeTimer,this,&AfsCharacter::MeleeCold,HeavyDelay,false);
-    }
+    PlayAnimMontage(astMeleeHvy);
+    //if(MeleeAllowed)
+    //{
+    //    MeleeAllowed = false;
+    //    GetWorldTimerManager().SetTimer(MeleeTimer,this,&AfsCharacter::MeleeCold,HeavyDelay,false);
+    //}
 }
 //INPUT HANDLERS---------------------------------------------------------------
 void AfsCharacter::doRightShoulderPressed()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Right Shoulder Pressed"));
-    if(CharacterMode == 0)
-        doMeleeLgt();
+	switch(CharacterMode)
+    {
+        case 0://melee
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Melee"));
+			if(MeleeWeapon)MeleeWeapon->OnRightShoulderPressed();
+            break;
+        case 1://gun
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Ranged"));
+			if(RangedWeapon)RangedWeapon->OnRightShoulderPressed();
+            break;
+        case 2://magic or special
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Magic"));
+            break;
+    }
 }
 void AfsCharacter::doRightShoulderReleased()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Right Shoulder Released"));
+	switch(CharacterMode)
+    {
+        case 0://melee
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Melee"));
+			if(MeleeWeapon) MeleeWeapon->OnRightShoulderReleased();
+            break;
+        case 1://gun
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Ranged"));
+			if(RangedWeapon)RangedWeapon->OnRightShoulderReleased();
+            break;
+        case 2://magic or special
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Magic"));
+            break;
+    }
 }
 void AfsCharacter::doRightTriggerPressed()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Right Trigger Pressed"));
-    if(CharacterMode == 0)
-        doMeleeHvy();
+	switch(CharacterMode)
+    {
+        case 0://melee
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Melee"));
+			if(MeleeWeapon)MeleeWeapon->OnRightTriggerPressed();
+            break;
+        case 1://gun
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Ranged"));
+			if(RangedWeapon)RangedWeapon->OnRightTriggerPressed();
+            break;
+        case 2://magic or special
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Magic"));
+            break;
+    }
 }
 void AfsCharacter::doRightTriggerReleased()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Right Trigger Released"));
+	switch(CharacterMode)
+    {
+        case 0://melee
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Melee"));
+			if(MeleeWeapon)MeleeWeapon->OnRightTriggerReleased();
+            break;
+        case 1://gun
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Ranged"));
+			if(RangedWeapon)RangedWeapon->OnRightTriggerReleased();
+            break;
+        case 2://magic or special
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Magic"));
+            break;
+    }
 }
 void AfsCharacter::doLeftShoulderPressed()
 {
@@ -158,10 +210,38 @@ void AfsCharacter::doLeftShoulderReleased()
 void AfsCharacter::doLeftTriggerPressed()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Left Trigger Pressed"));
+	switch(CharacterMode)
+    {
+        case 0://melee
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Melee"));
+			if(MeleeWeapon)MeleeWeapon->OnLeftTriggerPressed();
+            break;
+        case 1://gun
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Ranged"));
+			if(RangedWeapon)RangedWeapon->OnLeftTriggerPressed();
+            break;
+        case 2://magic or special
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Magic"));
+            break;
+    }
 }
 void AfsCharacter::doLeftTriggerReleased()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Left Trigger Released"));
+	switch(CharacterMode)
+    {
+        case 0://melee
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Melee"));
+			if(MeleeWeapon)MeleeWeapon->OnLeftTriggerReleased();
+            break;
+        case 1://gun
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Ranged"));
+			if(RangedWeapon)RangedWeapon->OnLeftTriggerReleased();
+            break;
+        case 2://magic or special
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("character mode Magic"));
+            break;
+    }
 }
 void AfsCharacter::doFaceTopPressed()
 {
@@ -193,7 +273,7 @@ void AfsCharacter::doFaceTopReleased()
 }
 void AfsCharacter::doFaceRightPressed()
 {
-        GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Face Right Pressed"));
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Face Right Pressed"));
 }
 void AfsCharacter::doFaceRightReleased()
 {

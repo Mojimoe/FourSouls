@@ -8,22 +8,18 @@ AfsWeapon::AfsWeapon()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-    
-
 }
 
 // Called when the game starts or when spawned
 void AfsWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
-void AfsWeapon::Tick( float DeltaTime )
+void AfsWeapon::Tick( float DeltaSeconds)
 {
-	Super::Tick( DeltaTime );
-
+	Super::Tick( DeltaSeconds );
 }
 
 void AfsWeapon::StartFire()
@@ -58,6 +54,22 @@ void AfsWeapon::MeleeSkill()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Melee Skill"));
 }
+void AfsWeapon::EnterIronSights()
+{
+    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Enter Iron Sights"));
+}
+void AfsWeapon::LeaveIronSights()
+{
+    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Leave Iron Sights"));
+}
+void AfsWeapon::WeaponCold()
+{
+    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Weapon Cold"));
+}
+void AfsWeapon::SkillCold()
+{
+    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Skill Cold"));
+}
 
 //up to three weapon abilities per weapon
 void AfsWeapon::OnLeftTriggerPressed()
@@ -85,9 +97,10 @@ void AfsWeapon::OnRightShoulderReleased()
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Weapon Right Shoulder Released"));
 }
 //called when put into main slot using D-pad
-void AfsWeapon::OnEquip()
+void AfsWeapon::OnEquip(AfsCharacter* player)
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Weapon Equipped"));
+	Player = player;
 }
 void AfsWeapon::OnDeequip()
 {

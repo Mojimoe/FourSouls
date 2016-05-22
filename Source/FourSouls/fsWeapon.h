@@ -15,24 +15,32 @@ public:
 	// Sets default values for this actor's properties
 	AfsWeapon();
     
-    FTimer MeleeTimer;
-    FTimer RangedSkillTimer;
-    FTimer ShotTimer;
-    FTimer RechargeTimer;
+	AfsCharacter* Player;
+    FTimerHandle MeleeTimer;
+    FTimerHandle SkillTimer;
+    FTimerHandle ShotTimer;
+    FTimerHandle RechargeTimer;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     float MeleeLightCooldown = .2f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     float MeleeHeavyCooldown = .4f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
-    float RangedSkillCooldown = 1.0f;
+    float SkillCooldown = 1.0f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     float ShotCooldown = .1f;//could change this to be interpreted as shots/second
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     float HeatIncrement = .1f;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     float OverHeat = .1f;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    float WeaponOverHeatMultiple= 2.f;
 
     bool IsMelee=true;
+	bool InIronSights = false;
+	bool AutomaticFire = false;
+	bool CanFire = true;
+	bool ShotFlag = true;
+	bool SkillColdFlag = true;
     
     virtual void StartFire();
     virtual void StopFire();
@@ -42,6 +50,10 @@ public:
     virtual void MeleeHvy();
     virtual void MeleeLgt();
     virtual void MeleeSkill();
+	virtual void EnterIronSights();
+	virtual void LeaveIronSights();
+	virtual void WeaponCold();
+	virtual void SkillCold();
     
     //up to three weapon abilities per weapon
     virtual void OnLeftTriggerPressed();
@@ -51,7 +63,7 @@ public:
     virtual void OnRightShoulderPressed();
     virtual void OnRightShoulderReleased();
     //called when put into main slot using D-pad
-    virtual void OnEquip();
+    virtual void OnEquip(AfsCharacter* player);
     virtual void OnDeequip();
     //called when readied/unreadied
     virtual void OnReady();
@@ -62,7 +74,4 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
-
-	
-	
 };

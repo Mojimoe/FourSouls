@@ -5,6 +5,10 @@
 #include "GameFramework/Character.h"
 #include "fsCharacter.generated.h"
 
+class AfsWeapon;
+class AfsMeleeWeapon;
+class AfsRangedWeapon;
+
 UCLASS()
 class FOURSOULS_API AfsCharacter : public ACharacter
 {
@@ -14,6 +18,9 @@ public:
     //character timers. melee timer can either be moved to weapon class (likely) or kept as ingame class specific.
     FTimerHandle MeleeTimer;
     FTimerHandle SwitchTimer;
+
+	AfsMeleeWeapon* MeleeWeapon=nullptr;
+	AfsRangedWeapon* RangedWeapon=nullptr;
 
     //character state booleans
     bool MeleeAllowed = true;
