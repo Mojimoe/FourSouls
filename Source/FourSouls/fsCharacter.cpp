@@ -2,8 +2,7 @@
 
 #include "FourSouls.h"
 #include "fsCharacter.h"
-#include "fsMeleeWeapon.h"
-#include "fsRangedWeapon.h"
+#include "fsWeapon.h"
 
 
 // Sets default values

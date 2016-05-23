@@ -34,7 +34,7 @@ void AfsWeapon::StopFire()
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Stop Fire"));
 	GetWorldTimerManager().ClearTimer(ShotTimer);
 	ShotFlag = false;
-	GetWorldTimerManager().SetTimer(ShotTimer, this, &AfsWeapon::FeatherPrevention, ShotCooldown, true);
+	GetWorldTimerManager().SetTimer(ShotTimer, this, &AfsWeapon::FeatherPrevention, ShotCooldown, false);
 }
 void AfsWeapon::FeatherPrevention()
 {
@@ -45,7 +45,7 @@ void AfsWeapon::FeatherPrevention()
 	//which also doesnt work.  This is likely the best solution.
 	//
 	//there could be a different architecture based on automatic fire rather than single fire that might work better, but that's a problem for a later time.
-	ShotFlag = false;
+	ShotFlag = true;
 }
 void AfsWeapon::IncreaseMeleeHeat()
 {
@@ -77,11 +77,13 @@ void AfsWeapon::IncreaseRangedHeat()
 		Heat += HeatIncrement;
 		if (Heat >= RangedOverHeat)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("OVERHEAT"));
 			GetWorldTimerManager().SetTimer(RangedRechargeTimer, this, &AfsWeapon::RangedWeaponCold, WeaponRangedOverHeatMultiple*RangedOverHeat, false);
 			CanFire = false;
 		}
 		else
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("WARMING"));
 			GetWorldTimerManager().SetTimer(RangedRechargeTimer, this, &AfsWeapon::RangedWeaponCold, Heat, false);
 		}
 		ShotFlag = true;

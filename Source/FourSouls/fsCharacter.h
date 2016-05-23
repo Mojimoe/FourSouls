@@ -6,8 +6,6 @@
 #include "fsCharacter.generated.h"
 
 class AfsWeapon;
-class AfsMeleeWeapon;
-class AfsRangedWeapon;
 
 UCLASS()
 class FOURSOULS_API AfsCharacter : public ACharacter
