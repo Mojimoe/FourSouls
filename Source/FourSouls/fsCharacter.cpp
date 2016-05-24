@@ -47,20 +47,37 @@ void AfsCharacter::BeginPlay()
 void AfsCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+	//FString Pos = FString(TEXT("(X: ")) + FString::SanitizeFloat(GetInputAxisValue(TEXT("Player_X"))) + FString(TEXT(", "))+
+		FString(TEXT("Y: ")) + FString::SanitizeFloat(GetInputAxisValue(TEXT("Player_Y"))) + FString(TEXT(")"));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, *Pos );
 }
 
-void AfsCharacter::MoveX(float in)
+void AfsCharacter::MoveX(float in)//TODO move sprint stuff into a custom movement component so people cant hack the client
 {
-    if(in)
+	float xval = GetInputAxisValue(TEXT("Player_X"));
+	float yval = GetInputAxisValue(TEXT("Player_Y"));
+	if (Sprinting & (xval > 0) & (xval >= fabsf(yval)))
+	{
+        AddMovementInput(GetActorForwardVector(),in/2 * SprintSpeedMultiplierForward);
+	}
+    else
     {
-        AddMovementInput(GetActorForwardVector(),in);
+		Sprinting = false;
+        AddMovementInput(GetActorForwardVector(),in/2);
     }
 }
 void AfsCharacter::MoveY(float in)
 {
-    if(in)
+	float xval = GetInputAxisValue(TEXT("Player_X"));
+	float yval = GetInputAxisValue(TEXT("Player_Y"));
+	if (Sprinting & (xval >= 0) & (xval >= fabsf(yval)))
+	{
+        AddMovementInput(GetActorForwardVector(),in/2 * SprintSpeedMultiplierSideways);
+	}
+	else
     {
-        AddMovementInput(GetActorRightVector(),in);
+		Sprinting = false;
+        AddMovementInput(GetActorRightVector(),in/2);
     }
 }
 
@@ -100,10 +117,8 @@ void AfsCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
         InputComponent->BindAxis("Player_Y",this,&AfsCharacter::MoveY);
         InputComponent->BindAxis("Player_Yaw",this,&AfsCharacter::AddControllerYawInput);
         InputComponent->BindAxis("Player_Pitch",this,&AfsCharacter::AddControllerPitchInput);
-	InputComponent->BindAxis("Player_XGP", this, &AfsCharacter::MoveX);
-	InputComponent->BindAxis("Player_YGP", this, &AfsCharacter::MoveY);
-	InputComponent->BindAxis("Player_YawGP", this, &AfsCharacter::AddControllerYawInputGP);
-	InputComponent->BindAxis("Player_PitchGP", this, &AfsCharacter::AddControllerPitchInputGP);
+		InputComponent->BindAxis("Player_YawGP", this, &AfsCharacter::AddControllerYawInputGP);
+		InputComponent->BindAxis("Player_PitchGP", this, &AfsCharacter::AddControllerPitchInputGP);
 }
 
 void AfsCharacter::AddControllerYawInputGP(float in)
@@ -289,6 +304,28 @@ void AfsCharacter::doFaceTopReleased()
 void AfsCharacter::doFaceRightPressed()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Face Right Pressed"));
+	UCharacterMovementComponent *charmov = this->GetCharacterMovement();
+	if (charmov->MovementMode == MOVE_Walking)
+	{
+		float xval = GetInputAxisValue(TEXT("Player_X"));
+		float yval = GetInputAxisValue(TEXT("Player_Y"));
+		if ((xval > 0) & (xval>=fabsf(yval)))
+		{
+			PlayAnimMontage(ForwardRoll);
+		}
+		else if ((yval > 0) & (yval >= fabsf(xval)))
+		{
+			PlayAnimMontage(RightRoll);
+		}
+		else if ((yval < 0) & (-yval >= fabsf(xval)))
+		{
+			PlayAnimMontage(LeftRoll);
+		}
+		else
+		{
+			PlayAnimMontage(BackRoll);
+		}
+	}
 }
 void AfsCharacter::doFaceRightReleased()
 {
@@ -365,6 +402,7 @@ void AfsCharacter::doRightStickReleased()
 void AfsCharacter::doLeftStickPressed()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Left Stick Pressed"));
+	Sprinting = true;
 }
 void AfsCharacter::doLeftStickReleased()
 {

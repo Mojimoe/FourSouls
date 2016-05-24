@@ -120,7 +120,18 @@ void AfsWeapon::MeleeHvy()
 	{
 		MeleeFlag = false;
 		HeatIncrement = MeleeHeavyCooldown * 2;//obviously, all of these are just to demonstrate the capabilities of the current weapon architecture, they can be changed dramatically.
-		if(Player)Player->PlayAnimMontage(astMeleeHvy);
+		if (Player)
+		{
+			UCharacterMovementComponent *charmov = Player->GetCharacterMovement();
+			if (charmov->MovementMode == MOVE_Walking)
+			{
+				Player->PlayAnimMontage(astMeleeHvy);
+			}
+			else
+			{
+				Player->PlayAnimMontage(astMeleeHvyAir);
+			}
+		}
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Melee Heavy"));
 		//having heat on melee weapons could be interesting though.
 		GetWorldTimerManager().SetTimer(MeleeTimer, this, &AfsWeapon::IncreaseMeleeHeat, MeleeHeavyCooldown, false);
@@ -134,7 +145,18 @@ void AfsWeapon::MeleeLgt()
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Melee Light"));
 		MeleeFlag = false;
 		HeatIncrement = MeleeLightCooldown * 2;
-		if(Player)Player->PlayAnimMontage(astMeleeLgt);
+		if (Player)
+		{
+			UCharacterMovementComponent *charmov = Player->GetCharacterMovement();
+			if (charmov->MovementMode == MOVE_Walking)
+			{
+				Player->PlayAnimMontage(astMeleeLgt);
+			}
+			else
+			{
+				Player->PlayAnimMontage(astMeleeLgtAir);
+			}
+		}
 		GetWorldTimerManager().SetTimer(MeleeTimer, this, &AfsWeapon::IncreaseMeleeHeat, MeleeLightCooldown, false);
 	}
 }

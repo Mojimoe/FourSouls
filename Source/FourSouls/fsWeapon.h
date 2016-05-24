@@ -50,6 +50,10 @@ public:
     UAnimMontage* astMeleeHvy;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
     UAnimMontage* astMeleeLgt;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    UAnimMontage* astMeleeHvyAir;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")
+    UAnimMontage* astMeleeLgtAir;
 
 	bool InIronSights = false;
 	bool CanFire = true;

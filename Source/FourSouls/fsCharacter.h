@@ -23,6 +23,7 @@ public:
     //character state booleans
     bool MeleeAllowed = true;
     bool SwitchAllowed = true;
+	bool Sprinting = false;
 
     //character state integers
     int JumpVal = 0;
@@ -33,6 +34,10 @@ public:
     float SwitchDelay = 2.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JumpVelocity")
     float JumpVelocity = 800.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SprintSpeedMultiplier")
+    float SprintSpeedMultiplierForward= 2.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SprintSpeedMultiplier")
+    float SprintSpeedMultiplierSideways= 1.3f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Melee")
 	float LightDelay=0.3f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Melee")
@@ -43,6 +48,14 @@ public:
     float YawSensitivity = 2.0f;
     
     //animation montages specified on character. this will be moved to the weapon class. TODO
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Roll")
+    UAnimMontage* ForwardRoll;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Roll")
+    UAnimMontage* RightRoll;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Roll")
+    UAnimMontage* BackRoll;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Roll")
+    UAnimMontage* LeftRoll;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Melee")
     UAnimMontage* astMeleeHvy;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Melee")
