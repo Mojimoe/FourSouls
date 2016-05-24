@@ -48,7 +48,7 @@ void AfsCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 	//FString Pos = FString(TEXT("(X: ")) + FString::SanitizeFloat(GetInputAxisValue(TEXT("Player_X"))) + FString(TEXT(", "))+
-		FString(TEXT("Y: ")) + FString::SanitizeFloat(GetInputAxisValue(TEXT("Player_Y"))) + FString(TEXT(")"));
+	//FString(TEXT("Y: ")) + FString::SanitizeFloat(GetInputAxisValue(TEXT("Player_Y"))) + FString(TEXT(")"));
 	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, *Pos );
 }
 

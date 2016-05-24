@@ -20,6 +20,7 @@ public:
     FTimerHandle RangedSkillTimer;
     FTimerHandle MeleeSkillTimer;
     FTimerHandle ShotTimer;
+    FTimerHandle FeatherTimer;
     FTimerHandle RangedRechargeTimer;
     FTimerHandle MeleeRechargeTimer;
     UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "WeaponProperties")

@@ -25,6 +25,7 @@ void AfsWeapon::Tick( float DeltaSeconds)
 void AfsWeapon::StartFire()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Start Fire"));
+	GetWorldTimerManager().ClearTimer(ShotTimer);
 	Fire();
 	GetWorldTimerManager().SetTimer(ShotTimer, this, &AfsWeapon::Fire, ShotCooldown, true);
 	//the shot timer utility and the shotflag should be removed from the fire function, since it's handled up here as a repeating timer.
@@ -33,8 +34,12 @@ void AfsWeapon::StopFire()
 {
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Stop Fire"));
 	GetWorldTimerManager().ClearTimer(ShotTimer);
-	ShotFlag = false;
-	GetWorldTimerManager().SetTimer(ShotTimer, this, &AfsWeapon::FeatherPrevention, ShotCooldown, false);
+	if (GetWorldTimerManager().GetTimerRemaining(FeatherTimer) == -1.0f)
+	{
+		ShotFlag = false;
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("FeatherTimer Start"));
+		GetWorldTimerManager().SetTimer(FeatherTimer, this, &AfsWeapon::FeatherPrevention, ShotCooldown, false);
+	}
 }
 void AfsWeapon::FeatherPrevention()
 {
@@ -45,6 +50,7 @@ void AfsWeapon::FeatherPrevention()
 	//which also doesnt work.  This is likely the best solution.
 	//
 	//there could be a different architecture based on automatic fire rather than single fire that might work better, but that's a problem for a later time.
+    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("FeatherPrevention"));
 	ShotFlag = true;
 }
 void AfsWeapon::IncreaseMeleeHeat()
@@ -93,13 +99,13 @@ void AfsWeapon::Fire()
 {
 	if (AutomaticFire & CanFire & ShotFlag)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fire"));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("AutomaticFire"));
 		HeatIncrement = RangedHeatIncrement;
 		IncreaseRangedHeat();
 	}
-	else if (CanFire & ShotFlag)
+	else if (!AutomaticFire & CanFire & ShotFlag)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Fire"));
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("SingleFire"));
 		ShotFlag = false;
 		HeatIncrement = RangedHeatIncrement;
 		GetWorldTimerManager().SetTimer(ShotTimer, this, &AfsWeapon::IncreaseRangedHeat, ShotCooldown, false);
@@ -232,10 +238,12 @@ void AfsWeapon::OnRightTriggerPressed()
 	}
 	else if(AutomaticFire)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Weapon Right Trigger Pressed Pre-Startfire"));
 		StartFire();
 	}
 	else
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Weapon Right Trigger Pressed Pre-Singlefire"));
 		Fire();
 	}
 }
@@ -244,6 +252,7 @@ void AfsWeapon::OnRightTriggerReleased()
     GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Weapon Right Trigger Released"));
 	if (!IsMelee & AutomaticFire)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("Weapon Right Trigger Released Pre-Stopfire"));
 		StopFire();
 	}
 }

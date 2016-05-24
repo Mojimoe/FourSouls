@@ -23,6 +23,7 @@ public:
     //character state booleans
     bool MeleeAllowed = true;
     bool SwitchAllowed = true;
+    UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category = "Sprint")
 	bool Sprinting = false;
 
     //character state integers
@@ -34,9 +35,9 @@ public:
     float SwitchDelay = 2.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JumpVelocity")
     float JumpVelocity = 800.0f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SprintSpeedMultiplier")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sprint")
     float SprintSpeedMultiplierForward= 2.0f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SprintSpeedMultiplier")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sprint")
     float SprintSpeedMultiplierSideways= 1.3f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Melee")
 	float LightDelay=0.3f;
